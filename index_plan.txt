@@ -1,0 +1,35 @@
+index plan
+
+Consistency:
+
+Non-preferred terms cannot have parents or children.  Their only purpose is as pointers to preferred terms and giving them a hierarchy would serve no purpose.  
+
+Inorder to change a term from preferred to non-preferred and vice versa it must not reference anything in the index_use table and it must not have a parent.  
+
+The library requires that all updates/inserts contain consistent data.  It will not automatically correct inconsistencies it will return false with an error message describing the inconsistency.  This design decision is open to revision.  One exception may be deleting a term: this operation deletes the term and all references to it in the index_use, index_var, and index_related tables as well.
+Automatic corrections are not used because a) there shouldn't be a need to change the preferred status of a term often if ever and 2) if you accidentally change the status you will loose a lot of information that will be a pain to fix.
+
+A consistent preferred term will not have a NULL parent and will not be referenced in the index_id column of index_use.  It must reference one row in index_var.
+
+A consistent non-preferred term's parent will be NULL and will not be referenced in the preferred_id column of index_use.  It must reference one row in index_var.
+
+To be decided:
+Another controversial design decision is have a preferred/non-preferred column at all.  The alternative is to just check for references in the index_use table and go from there.  This is better for normalization, but it might be a more expensive check and...?
+
+Design:
+The preferred boolean column is required.  If we merely searched index_use for the term in either of those columns any term which didn't have any use or use_for related terms would be undefined.
+
+The index_use index on (index_id, preferred_id) prevents using the preferred term singly and as part of a USE AND.  This is correct behavior because in that case only reference the single term.  Non-required combinations are not suggested.
+
+
+New select behavior:
+
+call function to select term and return all values in an object else NULL on error
+
+compare value of preferred to the stored value in index->preferred
+if different destroy form and build other form
+else call function to fill in form with new values
+
+call function to create either pref or non-pref form and pass object with values
+
+but this means destroying form between requeries. we don't want that.  And changing pref will be very rare.
