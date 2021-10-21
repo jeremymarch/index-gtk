@@ -1,6 +1,6 @@
 CC = gcc
-INCLUDES = -I/usr/include/mysql
-LIBS = -L/usr/local/mysql/lib -lmysqlclient -lz
+INCLUDES = `pkg-config --cflags mariadb`
+LIBS = `pkg-config --libs mariadb`
 GTK_INC = `pkg-config --cflags gtk+-2.0`
 GTK_LIBS = `pkg-config --libs gtk+-2.0`
 DEBUG = -g -Wall
