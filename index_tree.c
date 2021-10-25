@@ -4,6 +4,8 @@
 #include "generic_index_window.h"
 #include "index_tree.h"
 
+extern MYSQL *conn;
+
 static gboolean
 indexGetData(GtkWidget *sourceView, GdkDragContext *context, GtkSelectionData *seldata, 
              guint info, guint time, gpointer data)

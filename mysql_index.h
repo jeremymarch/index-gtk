@@ -1,5 +1,5 @@
-#define MAX_QUERY_LEN 600
-#define MAX_ERROR_LEN 200
+#define MAX_QUERY_LEN 1024
+#define MAX_ERROR_LEN 2048
 
 #define NEW_GROUP 0
 
@@ -126,3 +126,4 @@ sauros_select_use_group (MYSQL *conn, int non_pref_id, int group,
 
 int
 sauros_select_term (MYSQL *conn, int index_id, indexForm *index);
+

@@ -8,6 +8,8 @@
 #define _GNU_SOURCE
 #include <getopt.h>
 
+MYSQL *conn;
+
 #define MAX_USER_LEN     16 /* did "DESC user" in "mysql" database */
 #define MAX_PASSWORD_LEN 20
 #define MAX_DB_LEN       64 /* http://dev.mysql.com/doc/mysql/en/Legal_names.html */
@@ -127,7 +129,7 @@ tryLogin(GtkWidget *button, gpointer login)
     portNum = atoi(port);
 
   if ((conn = do_connect ((char *) host, (char *) user, (char *) pass, 
-                          (char *) db, (uint) portNum, (char *) sock, 0)) != NULL)
+                          (char *) db, (unsigned int) portNum, (char *) sock, 0)) != NULL)
   {
     indexTree = createIndexTreeWindow();
     g_signal_connect (indexTree, "destroy", gtk_main_quit, NULL);
@@ -260,7 +262,7 @@ main (int argc, char **argv)
 
   struct login_params lp = { NULL, NULL, NULL, 0, NULL, NULL };
 
-  const char *groups[] = { "client", "index", NULL };
+  //const char *groups[] = { "client", "index", NULL };
 
   struct option long_options[] = {
     {"host",     1, NULL, 'h'},
@@ -273,8 +275,8 @@ main (int argc, char **argv)
 
   gtk_init(&argc, &argv);
 
-  my_init(); /* initialize load_defaults() */
-  load_defaults ("my", groups, &argc, &argv);
+  //my_init(); /* initialize load_defaults() */
+  //load_defaults ("my", groups, &argc, &argv);
 
   while ((opt = getopt_long (argc, argv, "h:p::u:P:S:", long_options,
                              &option_index)) != EOF)
@@ -309,7 +311,7 @@ main (int argc, char **argv)
   }
 
   if ((conn = do_connect ((char *) lp.host_name, (char *) lp.user_name, (char *) lp.password, 
-                          (char *) lp.db_name, (uint) lp.port_num, (char *) lp.socket_name, 0)) == NULL)
+                          (char *) lp.db_name, (unsigned int) lp.port_num, (char *) lp.socket_name, 0)) == NULL)
   {
     /* if can't login from config file or cli opts then load gui login window */
     printf("host: %s\n", lp.host_name);

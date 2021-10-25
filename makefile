@@ -1,9 +1,9 @@
-CC = gcc
-INCLUDES = `pkg-config --cflags mariadb`
-LIBS = `pkg-config --libs mariadb`
+CC = gcc -std=c99
+INCLUDES = `mariadb_config --cflags`
+LIBS = `mariadb_config --libs`
 GTK_INC = `pkg-config --cflags gtk+-2.0`
 GTK_LIBS = `pkg-config --libs gtk+-2.0`
-DEBUG = -g -Wall
+DEBUG = -g -Wall -DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_44 -DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_60 -DGTK_DISABLE_DEPRECATED
 
 all: zindex
 

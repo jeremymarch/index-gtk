@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+extern MYSQL *conn;
+
 #define MAX_MESG_LEN 200
 
 static char messageBuffer[MAX_MESG_LEN];
@@ -517,7 +519,8 @@ createComboBoxEntry()
   GtkListStore *model;
 
   model = gtk_list_store_new (2, G_TYPE_INT, G_TYPE_STRING);
-  comboBox = gtk_combo_box_entry_new_with_model(GTK_TREE_MODEL(model), 1);
+   
+  comboBox = gtk_combo_box_new_with_model_and_entry(GTK_TREE_MODEL(model));
 
   return comboBox;
 }
@@ -896,7 +899,7 @@ highlight_expose (GtkWidget *widget,
 	int width;
 	int height;
 
-	if (GTK_WIDGET_DRAWABLE (widget)) {
+	if (gtk_widget_is_drawable(widget)) {
 		bin_window = 
 			gtk_tree_view_get_bin_window (GTK_TREE_VIEW (widget));
 		
@@ -904,7 +907,7 @@ highlight_expose (GtkWidget *widget,
 		
 		gtk_paint_focus (widget->style,
 				 bin_window,
-				 GTK_WIDGET_STATE (widget),
+				 gtk_widget_get_state (widget),
 				 NULL,
 				 widget,
 				 "treeview-drop-indicator",
